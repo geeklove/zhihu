@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+ {% block title %}评论文章{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block page_content %}
+
+<div  style="margin-left: 20%;width:  675px;font-size:20px; font-weight: 700;margin-top:20px; word-wrap: break-word; white-space: pre-wrap; " >{{ art.title_or_ans  }}</div>
+<div  style="margin-left: 20%; margin-top: 10px; " > <a href="{{ url_for('user',  id = art.author_id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ art.author.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 135%; font-weight: 700%"><a class="user" href="{{ url_for('user',  id =art.author_id) }}">{{ art.author.name }}</a></span></div></br>
+<div  style="margin-left: 20%; margin-top: 10px; width: 675px; margin-top:10px;" >{{ art.article.content }}</div>
+</br>
+<div  style="margin-left: 20%; " ><a href="{{ url_for('comment_on_article', id=art.id) }}">评论</a></div>
+</br>
+
+
+
+
+
+{% for c in comments  %}
+
+<p style="margin-left:20%; width: 675px;">
+            <a href="{{ url_for('user',  id = c.user_.id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ c.user_.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 135%; font-weight: 700%"><a  class="user" href="{{ url_for('user',  id =c.user_.id) }}">{{ c.user_.name }}</a> </span>
+            </p>
+  <span style="margin-left: 20%;">{{ c.content }}</br></span>
+  <span style="margin-left: 20%; color: gray;position: relative; top:1px; ">发布于 {{ moment(c.timestamp).format('YYYY-MM-D') }}</span>
+  <hr style="margin-left: 20%; align:left; width: 675px; " />
+{% endfor %}
+<div style="margin-left: 75%;">
+{% import "_macros.html" as macros %}
+  {% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.comment_on_article', id = art.id) }}
+
+{% endif %}
+</div>
+</br>
+<div style="width: 675px; margin-left: 20%;">
+    {{ wtf.quick_form(cform) }}
+    <br>
+    
+</div>
+
+
+{% endblock %}

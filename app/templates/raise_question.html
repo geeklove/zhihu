@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+
+{% block title %}提问{% endblock %}
+
+{% block page_content %}
+<div style="margin-left: 7%;" >
+    <h2>您可以在这里提问：</h2>
+</div>
+<hr style="margin-left: 7%; align:left; width: 675px; " />
+
+
+<form style="margin-left: 7%; " action="{{ url_for('raise_question')}}" method=post>
+   {{form.hidden_tag()}}
+   <dl>
+      <dt>问题标题：<br><br>
+      <dd>{{ form.title(cols="82", rows="2" ,style=" border-radius: 4px;") }}<br><br>
+      <dt>问题描述：<br><br>
+      <dd>{{ form.body(cols="82", rows="10"  ,style=" border-radius: 4px;") }}<br>
+   </dl>
+   <p>
+      <input type=submit value="发布">
+</form>
+
+
+{% endblock %}
+
+
+
+

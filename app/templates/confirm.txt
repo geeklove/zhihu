@@ -1,0 +1,7 @@
+亲爱的用户,您好:
+
+为确认您的账户, 请点击下面的链接:
+
+{{ url_for('confirm', token=token, _external=True) }}
+
+请勿回复此邮件

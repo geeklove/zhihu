@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}评论答案{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block page_content %}
+
+<div  style="margin-left: 7%;  font-size:20px; font-weight: 700; margin-top: 18px;width: 700px;" >{{ ques.title_or_ans}}</div>
+<div  style="margin-left: 7%;width: 675px;  margin-top: 8px;" >{{ ques.question.description }}</div>
+</br>
+<div  style="margin-left: 7%;  " ><a href="{{ url_for('comment_on_question', id=ques.id) }}">评论</a></div>
+</br>
+
+         <p >
+                 {% if not current_user.is_following_post(ques.id) %}
+                <a href="{{ url_for('follow_question_or_tag', id=ques.id) }}" style="position: absolute; left: 900px; top: 150px; " class="btn btn-primary">关注问题</a>
+                {% else %}
+                <a href="{{ url_for('unfollow_question_or_tag', id=ques.id) }}" style="position: absolute; left: 900px; top: 150px;" class="btn btn-default" >取消关注</a>
+                {% endif %}
+        </p>
+
+
+ 
+  <p style="margin-left:7%; ">
+            <a href="{{ url_for('user',  id = a.author.id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ a.author.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 135%; font-weight: 700%"><a  class="user" href="{{ url_for('user',  id =a.author.id) }}">{{ a.author.name }}</a></span>{% if a.author.about_me %}<span style="position: relative; left:8px;font-size: 13px; ">, {{a.author.about_me}}</span>{% endif %}
+            </p>  
+     
+            <span style="color: gray; font-size: 90%;margin-left: 7%; ">{{a.answer.upvote}}人赞同了该回答</span></br></br>
+
+  <span style="margin-left: 7%;  position: relative; top:-10px;">{{ a.title_or_ans }}</br></span>
+   <hr style="margin-left: 7%;  align:left; width: 675px; " />
+
+{% for c in comments  %}
+  <p style="margin-left:7%; ">
+            <a href="{{ url_for('user',  id = c.user_.id ) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ c.user_.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 135%; font-weight: 700%"><a  class="user" href="{{ url_for('user',  id =c.user_.id) }}">{{ c.user_.name }}</a>
+            </p>  
+<span style="margin-left: 7%; ">{{ c.content }}</br></span>
+<span style="margin-left: 7%; color: gray;position: relative; top:1px; ">发布于 {{ moment(c.timestamp).format('YYYY-MM-D') }}</span>
+  <hr style="margin-left: 7%;  align:left; width: 675px; " />
+{% endfor %}
+<div style="margin-left: 60%;">
+{% import "_macros.html" as macros %}
+  {% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.comment_on_answer' , quesid = ques.id, id =a.id) }}
+
+{% endif %}
+</div>
+</br>
+<div style="width: 675px; margin-left: 7%; ">
+    {{ wtf.quick_form(cform) }}
+    <br>
+    
+</div>
+
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block title %}我的关注{% endblock %}
+
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}　
+    {{ moment.locale('zh-cn') }}　　
+{% endblock %}
+
+
+{% block page_content %}
+
+{% import "_macros.html" as macros %}
+{% for p in posts %}
+		{% if p.types == 0  and p.id not in dic.keys() %}		
+			<p style="
+		                   margin-left: 7%; 
+		                  font-size: 14px;
+		                  position: relative; top: 7px; 
+		                  "><a  href="{{ url_for('user',  id = p.author.id) }}">  {{ p.author.name }}</a>  提了一个问题</br></p>		                
+
+			<p style="margin-left: 7%; 
+		                  font-size: 18px;
+		                  width: 700px;
+		                  "><a class="zhihuz" href="{{ url_for('question', id = p.id) }}">{{ p.title_or_ans }}</a>
+		                  <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br>
+		                  </p>
+		                  <p style="
+		                 margin-left: 7%; 
+		                  font-size: 15px;
+		                  width: 700px;">
+			{{ p.question.description }}
+			</p>
+			<hr style="margin-left: 7%; align:left; width: 675px; " />
+		{% elif p.types == 1  %}		
+			<p style="margin-left: 7%; 
+		                  font-size: 14px;
+		                  width: 700px;
+		                  position: relative; top: 7px; 
+		                  " ><a  href="{{ url_for('user',  id =  p.author.id) }}"> {{ p.author.name }} </a> 发布了文章</br></p>
+
+
+			<p style="margin-left: 7%; 
+		                  font-size: 18px;
+		                  width: 700px;
+		                  "><a class="zhihuz" href="{{ url_for('article', id = p.id) }}">{{p.title_or_ans }}</a>
+		                  <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br>
+		                  </p>
+
+		                  <p style="margin-left: 7%; 
+		                  font-size: 15px;
+		                  width: 700px;">
+			{{ p.content }}
+			</p>
+			<hr style="margin-left: 7%; align:left; width: 675px; " />
+
+		{% elif p.types == 0 and p.id in dic.keys() %}
+			<p>
+			<span style="margin-left: 7%; 
+		                  font-size: 14px; width: 700px;">   </span> 
+		                  {% for uu in u if uu.id in dic[p.id]%}
+		                   <span style=" position: relative; top: 7px;"><a  href="{{ url_for('user',  id = uu.id) }}">  {{ uu.name }}</a> </span>
+		                  {% endfor %}
+
+		                  <span style="font-size: 14px; position: relative; top: 7px; "> 关注了问题	</span></p>
+
+	                 
+			<p style="margin-left: 7%; 
+		                  font-size: 18px;width: 700px;
+		                  "><a class="zhihuz"  href="{{ url_for('question', id = p.id) }}">{{ p.title_or_ans }}</a>
+		                  <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br>
+		                  </p>
+
+		                  <p style="
+		                  margin-left: 7%; 
+		                  font-size: 15px;width: 700px;">
+			{{ p.question.description }}
+			</p>
+			<hr style="margin-left: 7%; align:left; width: 675px; " />
+
+
+		{% elif p.types == 3  %}		
+			<p>
+				<span style="margin-left: 7%; 
+		                  font-size: 14px;width: 700px; position: relative; top: 7px;  "></span>
+		                  {% for uu in u if uu.id in dic[p.id]%}
+		                  <a style=" position: relative; top: 7px;" href="{{ url_for('user',  id = uu.id) }}">  {{ uu.name }}</a>  
+		                  {% endfor %}
+		                  <span style="font-size: 14px; position: relative; top: 7px;  "> 关注了话题</span>
+		                  </p>
+	                 
+			<p style="margin-left: 7%; 
+		                  font-size: 18px; width: 700px;
+		                  "><a class="zhihuz" href="{{ url_for('about_the_tag', id = p.id) }}">{{ p.title_or_ans }}</a>
+		                  <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br>
+		                  </p>
+
+			<hr style="margin-left: 7%; align:left; width: 675px; " />
+
+		{% elif p.types == 2  and p.id not in dicvote.keys() %}		
+			<p style="
+		                  font-size: 14px;
+		                  margin-left: 7%;width: 700px;
+		                  "><a  style=" position: relative; top: 7px;"  href="{{ url_for('user',  id = p.author_id) }}"> {{ p.author.name }}</a><span 		                  style=" position: relative; top: 7px;"> 回答了问题</span></br></p>
+
+		                  {% for q in ques if p.answer.belongtoques == q.id%}
+			<p style="
+		                  font-size: 18px;
+		                  margin-left: 7%;width: 700px;
+		                  "><a class="zhihuz" href="{{ url_for('question', id = q.id) }}">{{q.title_or_ans}}</a>
+		                  <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(q.timestamp).fromNow() }}</span></br></p>
+		                  {% endfor %}
+
+		                  <p style="margin-left:7%;">
+            <a href="{{ url_for('user',  id = p.author.id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ p.author.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 15px; font-weight: 700%"><a  href="{{ url_for('user',  id =  p.author.id) }}">{{ p.author.name }}</a></span> {% if p.author.about_me %}<span style="position: relative; left:8px;font-size: 13px; ">, {{p.author.about_me}}</span>{% endif %}
+            </p>  	
+			
+			<p style="margin-left:7%; font-size: 135%;width: 700px;font-size: 14px; ">  
+			{{ p.title_or_ans }}
+			</p>
+			<hr style="margin-left: 7%; align:left; width: 675px; " />
+			
+		{% elif p.types == 2  and p.id  in dicvote.keys()%}
+			<p>
+			<span style="margin-left: 7%; 
+		                  font-size: 14px; width: 700px;"></span>
+		                  {% for uu in u if uu.id in dicvote[p.id]%}
+		                  <a  style=" position: relative; top: 7px;"  href="{{ url_for('user',  id = uu.id) }}">  {{ uu.name }}</a>  
+		                  {% endfor %}
+		                  <span style="font-size: 14px; position: relative; top: 7px;""> 赞同了回答</span> 
+		                  </p>
+		                  {% for q in ques if p.answer.belongtoques == q.id%}
+			<p style="
+		                  font-size: 18px;
+		                  margin-left: 7%;width: 700px;
+		                  "><a class="zhihuz" href="{{ url_for('question', id = p.id) }}">{{q.title_or_ans}}</a>
+		                  <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(q.timestamp).fromNow() }}</span></br></p>
+		                  {% endfor %}
+
+ <p style="margin-left:7%;">
+            <a href="{{ url_for('user',  id = p.author.id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ p.author.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 15px; font-weight: 700%"><a  href="{{ url_for('user',  id =  p.author.id) }}">{{ p.author.name }}</a></span> {% if p.author.about_me %}<span style="position: relative; left:8px;font-size: 13px; ">, {{p.author.about_me}}</span>{% endif %}
+            </p>  	
+            
+
+			<p style="
+		                  font-size: 15px;
+		                  margin-left: 7%;width: 700px;">
+			{{ p.title_or_ans }}
+			</p>
+			<hr style="margin-left: 7%; align:left; width: 675px; " />
+		{% endif %}						
+	{% endfor %}	
+	
+  <div style="margin-left: 60%;"> 
+{% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.focus') }}
+
+{% endif %}
+</div>
+{% endblock %}

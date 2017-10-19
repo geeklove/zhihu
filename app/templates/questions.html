@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+ {% block title %}问题{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+{% block page_content %}
+
+<p style="margin-left: 7%; margin-top: 10px; font-size: 120%">
+{% for t in tags %}	
+<span style="padding-right: 30px;"> <a href="{{ url_for('about_the_tag', id = t.id) }}">{{ t.title_or_ans }}</a></span>
+{% endfor %}
+<span ><a href="{{ url_for('edit_tags', id = ques.id) }}">编辑问题标签</a></span>
+</p>
+
+
+
+<div  style="margin-left:7%;  font-size:20px; font-weight: 700;width: 700px;" >{{ ques.title_or_ans  }}</div>
+<div  style="margin-left: 7%; margin-top: 10px; width: 675px; " >{{ ques.question.description }}</div>
+</br>
+<div  style="margin-left: 7%; " ><a href="{{ url_for('comment_on_question', id=ques.id) }}">评论</a></div>
+</br>
+
+
+
+<p style="font-weight:bold; font-size: 120%;margin-left: 7%;">{{ ansnum }} 个回答</p>
+{% for a in ans  %}
+
+	<span style="position: absolute;left:12%; margin-top: -5px; ">
+            <a href="{{ url_for('user',  id = a.author_id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ a.author.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 135%; font-weight: 700%"><a class="user" href="{{ url_for('user',  id =a.author_id) }}">{{ a.author.name }}</a></span> {% if a.author.about_me %}<span style="position: relative; left:8px;font-size: 13px; ">, {{a.author.about_me}}</span>{% endif %}
+            </span>    <br>   <br>  
+            <span style="color: gray; font-size: 90%;margin-left: 7%;"><a  href="{{ url_for('post_upvotes',  ansid =a.id) }}">{{a.answer.upvote}}人</a>赞同了该回答</span></br></br>
+
+	<p style="margin-left: 7%; width: 700px;position: relative; top:-10px; ">{{ a.title_or_ans }}</p>
+      <span style="margin-left: 7%; color: gray;position: relative; top:-15px; ">发布于 {{ moment(a.timestamp).format('YYYY-MM-D') }}</span>
+
+
+
+	<div style="border-style: solid; border-color: transparent; margin-left: 7%;width: 50px; background-color: #99FFFF"> 
+	{{ a.answer.upvote }}<a  style="position: relative; top: -9px;border: 8px solid transparent;
+  border-bottom-color: #69F;
+  width: 0;
+  height: 0;" href="{{ url_for('upvote', quesid = ques.id, id = a.id) }}"></a></div> 
+
+  <div style="position: relative; left: 135px; top: -26px;border-style: solid; border-color: transparent; width:24px;background-color: #99FFFF;">  <a style="position: relative; top: 16px;border: 8px solid transparent;
+  border-top-color: #69F;
+  width: 0;
+  height: 0; " 
+  href="{{ url_for('downvote', quesid = ques.id, id = a.id) }}"></a></div><span style="margin-left:7%;position: relative;left: 90px; top: -50px;"> <a href="{{ url_for('comment_on_answer', quesid = ques.id, id = a.id) }}">评论</a></span>
+  <hr style="margin-left: 7%; align:left; width: 675px; margin-top: -40px; " />	
+	
+              <span style="margin-left:55px;position: relative;left: 145px; top: -52px;"> <img src="{{ url_for('static', filename='thank.png') }}" />感谢</a></span>
+
+
+{% endfor %}
+</p>
+
+<div style="width:300px; position: absolute;top:200px;left: 940px;">
+<p style="font-weight:bold; font-size: 120%;">相关问题</p>
+ {% for r in rposts %}
+ 	<span ><a href="{{ url_for('question', id = r.id) }}">{{r.title_or_ans}}</a></br></span>
+ {% endfor%}
+  </div>
+
+{% endblock %}

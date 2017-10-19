@@ -1,0 +1,182 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='z') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='z') }}" type="image/x-icon">
+
+<style type="text/css">
+.dropbtn {
+    background-color: #0033FF;
+    color: white;
+    height: 47px;
+    margin-top: -3px;
+    padding: 14px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #0099FF;
+}
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+#sinput:focus{
+  border-color: transparent;
+}
+.zhihu:link {
+    color:white;
+}
+.zhihu:visited {
+    color:white;
+}
+.zhihu:hover {color:white;
+    font-weight: 700;
+    text-decoration: none;
+}
+.zhihu:active {
+    color:white;
+    font-weight: 700;
+}
+</style>
+
+{% endblock %}
+
+{% block navbar %}
+<span>
+<span style="padding: 5px 50% 30px 50% ;   background-color: #0033FF; color:#0033FF;  ">.
+  </span>
+  </span>
+
+  <span  style=" 
+    color: white;
+    text-decoration: none;
+    font-size: 180%;
+    font-weight: 550;
+    margin-left: 12%;
+    position: relative;
+    top: -12px;
+    " ><a class="zhihu"  href="{{ url_for('index') }}">知乎</a>
+ </span>
+
+
+ {% if current_user.is_authenticated %}
+  <span style=" 
+    color: white;
+    text-decoration: none;
+   font-size: 120%;
+   margin-left: 3%;
+    font-weight: 500;
+    position:relative;
+    top: -14px;"><a class="zhihu" href="{{ url_for('focus') }}" style=" ">我的首页</a></span>
+    {% endif %}
+
+    <span style=" 
+    color: white;
+    text-decoration: none;
+   font-size: 120%;
+   margin-left: 1%;
+    font-weight: 500;
+    position:relative;
+    top: -14px;"><a class="zhihu" href="{{ url_for('about') }}">关于</a></span>
+
+  <span style=" 
+    color: white;
+    text-decoration: none;
+   font-size: 120%;
+   margin-left: 1%;
+    font-weight: 500;
+    position:relative;
+    top: -14px;"><a class="zhihu" href="{{ url_for('index') }}" > 发现</a></span> 
+
+    <span style=" position: absolute; left: 36%; top: 5px;" >
+<form   method="POST" action="{{ url_for('search_results')}}">
+    <input type="text" name="search"  value="{{ data }}" style="border-color: transparent;height: 38px; width: 300px; border-radius: 5px;" >
+    <input type="submit" name="commit" value="搜索" style="height: 35px; border-radius: 4px;position: relative; top: -1px;">
+</form>
+</span>
+
+
+
+ {% if current_user.is_authenticated %}
+<span style="position: absolute; right: 0%; top: 4px;"  class="dropdown">
+  <button class="dropbtn" ><span style="position: relative;top: -2px;">我的账户</span></button>
+  <div class="dropdown-content">
+    <a href="{{ url_for('user',  id = current_user.id) }}">我的主页
+</a>
+    <a href="{{ url_for('edit_profile',  id = current_user.id) }}">编辑资料</a>
+    <a href="{{ url_for('change_email_request') }}">更改邮箱</a>
+     <a href="{{ url_for('change_password') }}">更改密码</a>
+    <a href="{{ url_for('logout') }}">退出</a>
+  </div>
+</span>
+{% endif %}
+
+ {% if  not current_user.is_authenticated %}
+     <span style="  
+    position: absolute; right: 2%; top: 14px;
+     color: white;
+    text-decoration: none;
+   font-size: 120%;
+    font-weight: 500;
+"><a class="zhihu" href="{{ url_for('login') }}">登录</a></span>     
+{% endif %}
+
+{% if  current_user.is_authenticated and current_user.role_id == 1%}
+ <span style="  
+    position: absolute; right: 8%; top: 12px;
+     color: white;
+    text-decoration: none;
+   font-size: 120%;
+    font-weight: 500;
+"><a class="zhihu" href="{{ url_for('delete', types = 0, id = 0) }}">管理</a></span>     
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+<div  class="container">
+    {% for message in get_flashed_messages() %}
+    <div  style="position: absolute;top: 80px; left: 36%;width: 350px;" class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{moment.lang('zh-CN')}}
+{{ moment.include_moment() }}
+{% endblock %}

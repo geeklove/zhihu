@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}更改邮箱{% endblock %}
+
+{% block page_content %}
+<div style="margin-left: 7%;" class="page-header">
+    <h1>更改您的邮箱</h1>
+</div>
+<div style="margin-left: 7%;" class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

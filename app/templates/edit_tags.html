@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+ {% block title %}编辑文章标签{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div  style="margin-left: 30%; position: relative; top: -10px; height: 40px;" >
+<form   method="POST" action="{{ url_for('edit_tags', id = ques.id) }}">
+    <input type="text" name="tag1" value="{{ tagval1}}"  style="border-color: blue;height: 38px; width: 120px;border-radius: 5px; margin-top:10px;" >
+    <input type="text" name="tag2" value="{{ tagval2}}"  style="border-color: blue;height: 38px;width: 120px;border-radius: 5px; margin-top:10px;" >
+    <input type="text" name="tag3" value="{{ tagval3}}"  style="border-color: blue;height: 38px;width: 120px;border-radius: 5px; margin-top:10px;" >
+    <input type="submit" name="commit" style="height: 35px; border-radius: 2px;">
+</form>
+</div>
+
+
+
+
+<div  style="margin-left:7%;  font-size:20px; font-weight: 700; width: 700px;" >{{ ques.title_or_ans }}</div>
+<div  style="margin-left: 7%; margin-top: 10px; width: 675px;" >{{ ques.question.description }}</div>
+
+
+{% endblock %}

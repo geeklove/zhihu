@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}编辑资料{% endblock %}
+
+{% block page_content %}
+<div style="margin-left: 7%;" class="page-header">
+    <h1>编辑您的资料</h1>
+</div>
+<div style="margin-left: 7%;" class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+</br>
+<div style="position: relative; left: -370px;top: 260px;" >
+    <h4>更换头像,请到<a href="http://gravatar.com/">这里</a>登录上传您的头像.否则,系统会为您随机生成一个头像.</h4>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}话题{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+    font-size: 18px;
+    font-weight: 600;
+}
+.zhihuz:visited {
+	color:black;
+	font-size: 18px;
+	font-weight: 600;
+}
+.zhihuz:hover {
+	color:#000077;
+	font-size: 18px;
+	text-decoration: none;   
+	font-weight: 600;
+}
+.zhihuz:active {
+  	color:#000077;   
+  	font-size: 18px;
+  	text-decoration: none;   
+  	font-weight: 600;
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+	    font-size: 15px;
+   	 font-weight: 700;
+	color:black;
+	text-decoration: none;   
+}
+.user:hover {
+	    font-size: 15px;
+    font-weight: 700;
+	color:black;
+	text-decoration: none;   
+}
+.user:active {
+	    font-size: 15px;
+    font-weight: 700;
+  	color:black;
+  	text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block page_content %}
+
+{% import "_macros.html" as macros %}
+
+<p style="margin-left: 7%; font-weight: 700;font-size: 18px;margin-top: 18px;width: 700px;">
+话题: {{tag.title_or_ans}}
+</p>
+<hr style="margin-left: 7%;  align:left; width: 675px; margin-top: 8px; " />
+{% for q in ques %}
+	<p style="margin-left: 7%; width: 700px;
+		                  "><a class="zhihuz" href="{{ url_for('question', id = q.id) }}">{{ q.title_or_ans }}</a></p>
+	<div  style="margin-left: 7%; margin-top: 10px; width: 675px; " >{{ q.question.description }}</div>		
+			<hr style="margin-left: 7%;  align:left; width: 675px; " />	
+{% endfor %}
+
+ <p >
+                 {% if not current_user.is_following_post(tag.id) %}
+                <a href="{{ url_for('follow_question_or_tag', id=tag.id) }}" style="position: absolute; left: 940px; top: 150px; " class="btn btn-primary">关注话题</a>
+                {% else %}
+                <a href="{{ url_for('unfollow_question_or_tag', id=tag.id) }}" style="position: absolute; left: 940px; top: 150px;" class="btn btn-default" >取消关注</a>
+                {% endif %}
+        </p>
+
+  <div style="margin-left: 60%;">             
+{% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.about_the_tag') }}
+
+{% endif %}
+</div>
+{% endblock %}

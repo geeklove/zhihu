@@ -1,0 +1,5 @@
+<p>亲爱的用户,您好:</p>
+<p>为确认您的账户,  <a href="{{ url_for('confirm', token=token, _external=True) }}">点击这里</a>.</p>
+<p>或者您可以拷贝下面的链接至浏览器中访问:</p>
+<p>{{ url_for('confirm', token=token, _external=True) }}</p>
+<p><small>请勿回复此邮件.</small></p>

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}用户 - {{ user.name }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}　
+    {{ moment.locale('zh-cn') }}　　
+{% endblock %}
+
+
+{% block page_content %}
+<div class="page-header">
+    <img style="position: relative; left: 100px; " class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">   
+</div>
+
+        {% if user.name or user.location %}
+        <p>
+          <p style="position: absolute; left: 500px; top: 120px; font-size: 270%">  {% if user.name %}{{ user.name }}<br>{% endif %}</p>
+            {% if user.location %}
+              <p style="position: absolute; left: 500px; top: 170px; font-size: 180%">   来自 {{ user.location }}<br>
+            {% endif %}</p>
+            {% if user.about_me %}
+              <p style="position: absolute; left: 500px; top: 220px; font-size: 180%">   关于我:  {{ user.about_me }}<br>
+            {% endif %}</p>
+            <p style="position: absolute; left: 500px; top: 270px; font-size: 160%">   获得{{ user.ups }}次赞同, {{user.thanks}}次感谢<br>
+            <p style="position: absolute; left: 500px; top: 320px; font-size: 160%">  关注了: <a href="{{ url_for('follow_whom', id=user.id) }}"> {{l}}</a>
+	关注者: <a href="{{ url_for('followers', id=user.id) }}">{{r}}</a><br>
+
+        </p>
+        {% endif %}    
+
+         <p >
+            {% if current_user.can(Permission.FOLLOW) and user != current_user %}
+                {% if not current_user.is_following(user) %}
+                <a href="{{ url_for('follow', id=user.id) }}" style="position: absolute; left: 850px; top: 310px; " class="btn btn-primary">关注用户</a>
+                {% else %}
+                <a href="{{ url_for('unfollow', id=user.id) }}" style="position: absolute; left: 850px; top: 310px;" class="btn btn-default" >取消关注</a>
+                {% endif %}
+            {% endif %}
+        </p>
+
+      <span style="margin-left: 8%;font-size: 17px; font-weight: 700"> <a class="zhihuz" style="" href="{{ url_for('user',  id = user.id) }}">回答</a></span>
+        <span style="margin-left: 9%;font-size: 17px; font-weight: 700"> <a class="zhihuz" style="" href="{{ url_for('user1',  id = user.id, tag = 1) }}">文章</a></span>
+        <span style="margin-left: 10%;font-size: 17px; font-weight: 700"> <a class="zhihuz" style="" href="{{ url_for('user1',  id = user.id, tag = 0) }}">提问</a></span>
+        <span style="margin-left: 11%;font-size: 17px; font-weight: 700"> <a class="zhihuz" style="" href="{{ url_for('user1',  id = user.id, tag = 2) }}">赞同</a></span>
+        <span style="margin-left: 12%;font-size: 17px; font-weight: 700"> <a class="zhihuz" style="" href="{{ url_for('user1',  id = user.id, tag = 3) }}">关注</a></span>
+        </br>
+        <hr style="margin-left: 7%; align:left; width: 675px; " />
+
+        {% for p in art %}
+            <p style="
+                          font-size: 18px;
+                          margin-left: 7%;width: 700px;
+                          "><a class="zhihuz" href="{{ url_for('question', id = p.id) }}">{{p.title_or_ans}}</a>
+                          <span style="font-size:13px; position: absolute; left: 61%;
+                      ">{{ moment(p.timestamp).fromNow() }}</span></br></p>
+           <hr style="margin-left: 7%; align:left; width: 675px; " />
+                          {% endfor %}
+
+    <div style="margin-left: 60%;"> 
+{% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.user1', id = user.id, tag =0) }}
+
+{% endif %}
+</div>     
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}首页{% endblock %}
+{% block head %}
+{{ super() }}
+{{moment.lang('zh-CN')}}
+{{ moment.include_moment() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+	color:black;
+}
+.zhihuz:hover {
+	color:#000077;
+	text-decoration: none;   
+}
+.zhihuz:active {
+  	color:#000077;   
+  	text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+	    font-size: 15px;
+   	 font-weight: 700;
+	color:black;
+	text-decoration: none;   
+}
+.user:hover {
+	    font-size: 15px;
+    font-weight: 700;
+	color:black;
+	text-decoration: none;   
+}
+.user:active {
+	    font-size: 15px;
+    font-weight: 700;
+  	color:black;
+  	text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}　
+    {{ moment.locale('zh-cn') }}　　
+{% endblock %}
+
+
+
+{% block page_content %}
+
+<p style=" padding: 15px;margin-left: 2%;  margin-bottom: -2px; width: 760px;">
+<a  style="font-size: 16px; padding-left: 36px;" href="/raise_question/"><img src="{{ url_for('static', filename='t.png') }}" />提问</a>
+<a  style="font-size: 16px; position: relative; left:20px;"  href="/write_articles/"><img src="{{ url_for('static', filename='x.png') }}" />写文章</a>
+</p>
+
+{% for t in title %}
+	{% if t.types == 0 %}
+		<p style="margin-left: 7%; 
+			      font-size: 18px;
+			      font-weight: 600;
+			      width: 700px;
+		               "><a class="zhihuz"  href="{{ url_for('question', id = t.id) }}">{{ t.title_or_ans }}</a><span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(t.timestamp).fromNow() }}</span></br>
+		                  </p>
+		                 		                 
+		 <p style="
+		                 margin-left: 7%; 
+		                  font-size: 15px;
+		                  width: 675px; ">
+			{{ t.question.description }}
+			</p>
+			<hr style="margin-left: 6.7%; align:left; width: 675px; " />	
+
+		
+	{% elif t.types == 1 %}
+		<p style="margin-left: 7%; 
+			      font-size: 18px;
+			      font-weight: 600;
+			      width: 700px;
+		               "> <a class="zhihuz"  href="{{ url_for('article', id = t.id) }}">{{ t.title_or_ans }}</a>
+		               <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(t.timestamp).fromNow() }}</span> </br>
+		                  </p>
+		                  <p style="
+		                 margin-left: 7%; 
+		                  font-size: 15px;
+		                  width: 675px; ">
+			{{ t.article.content }}
+			</p>
+			<hr style="margin-left: 6.7%; align:left; width: 675px; " />	
+	{% endif %}			
+{% endfor %}
+
+  <div style="margin-left: 60%;"> 
+{% import "_macros.html" as macros %}
+{% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.index') }}
+
+{% endif %}
+</div>
+
+{% endblock %}

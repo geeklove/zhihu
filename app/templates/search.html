@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}搜索结果{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}　
+    {{ moment.locale('zh-cn') }}　　
+{% endblock %}
+
+
+
+{% block page_content %}
+
+{% import "_macros.html" as macros %}
+
+{% for p in posts %}		
+	{% if p.types == 3 %}
+		<p style=" margin-left: 7%; 
+		                  font-size: 18px;width: 700px;
+		                  "><a class="zhihuz"  style=" position: relative; top: 7px;" href="{{ url_for('about_the_tag', id = p.id) }}">{{ p.title_or_ans }}</a>
+		                    <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br></p>
+		                  	<hr style="margin-left: 7%; align:left; width: 700px; " />
+	{% elif p.types == 0 %}
+		<p style=" margin-left: 7%; 
+		                  font-size: 18px;width: 700px;
+		                  "><a class="zhihuz" 	style=" position: relative; top: 7px;"  href="{{ url_for('question', id = p.id) }}">{{ p.title_or_ans }}</a>
+		                    <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br></p>
+		<p style=" margin-left: 7%; 
+		                  font-size: 15px;
+		                  width: 700px;">{{ p.question.description }}	
+			</p>
+						<hr style="margin-left: 7%; align:left; width: 700px; " />
+	{% elif p.types == 1 %}
+		<p style=" margin-left: 7%; 
+		                  font-size: 18px;
+		                  width: 700px;
+		                  "><a style=" position: relative; top: 7px;"  class="zhihuz" href="{{ url_for('question', id = p.id) }}">{{ p.title_or_ans }}</a>
+		                    <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br></p>
+		<p style=" margin-left: 7%; 
+		                  font-size: 15px;
+		                  width: 700px;">{{ p.article.content }}	
+			</p>			<hr style="margin-left: 7%; align:left; width: 700px; " />
+	{% elif p.types == 2  %}
+	           {% for q in ques if p.answer.belongtoques == q.id %}
+		<p style=" margin-left: 7%; 
+		                  font-size: 18px;
+		                  width: 700px;
+		                  "><a  style=" position: relative; top: 7px;"  class="zhihuz" href="{{ url_for('question', id = p.answer.belongtoques) }}">{{ q.title_or_ans }}</a>
+		                    <span style="font-size:13px; position: absolute; left: 61%;
+		              ">{{ moment(p.timestamp).fromNow() }}</span></br></p>
+		{% endfor %}
+		<p style="margin-left:7%;">
+            <a href="{{ url_for('user',  id = p.author.id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ p.author.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 15px; font-weight: 700%"><a  class="zhihuz" href="{{ url_for('user',  id =p.author.id) }}">{{ p.author.name }}</a></span> {% if p.author.about_me %}<span style="position: relative; left:8px;font-size: 13px; ">, {{p.author.about_me}}</span>{% endif %}
+            </p>  
+            		
+		<p style="
+		                  margin-left: 7%; 
+		                  font-size: 14px;
+		                  width: 700px;">{{ p.title_or_ans }}	
+					<hr style="margin-left: 7%; align:left; width: 700px; " />
+	{% endif %}
+{% endfor %}
+  <div style="margin-left: 60%;"> 
+{% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.search_results') }}
+
+{% endif %}
+</div>
+{% endblock %}

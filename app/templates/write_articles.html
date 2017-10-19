@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+
+{% block title %}写文章{% endblock %}
+
+{% block page_content %}
+<div style="margin-left: 7%;" >
+    <h2>您可以在这里写文章：</h2>
+</div>
+<hr style="margin-left: 7%; align:left; width: 675px; " />
+
+
+<form style="margin-left: 7%;" action="{{ url_for('write_articles')}}" method=post>
+   {{form.hidden_tag()}}
+   <dl>
+      <dt>文章标题：<br><br>
+      <dd>{{ form.title(cols="82", rows="2" ,style=" border-radius: 4px;") }}<br><br>
+      <dt>正文内容：<br><br>
+      <dd>{{ form.body(cols="82", rows="20"  ,style=" border-radius: 4px;") }}<br>
+   </dl>
+   <p>
+      <input type=submit value="发布">
+</form>
+
+{% endblock %}
+
+
+
+

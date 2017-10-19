@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+ {% block title %}关注了{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.zhihuz:link {
+    color:black;  
+}
+.zhihuz:visited {
+  color:black;
+}
+.zhihuz:hover {
+  color:#000077;
+  text-decoration: none;   
+}
+.zhihuz:active {
+    color:#000077;   
+    text-decoration: none;   
+}
+
+.user:link {
+    color:black;  
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;   
+}
+.user:visited {
+      font-size: 15px;
+     font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:hover {
+      font-size: 15px;
+    font-weight: 700;
+  color:black;
+  text-decoration: none;   
+}
+.user:active {
+      font-size: 15px;
+    font-weight: 700;
+    color:black;
+    text-decoration: none;   
+}
+
+
+</style>
+{% endblock %}
+{% block page_content %}
+
+<div  style="margin-left:7%;  font-size:160%; font-weight: 700;margin-top: 18px;" >{{ u.name }}关注了:</div>
+<hr style="margin-left: 7%; align:left; width: 675px; margin-top: 8px;" />
+
+          {% for uu in u_all%}
+  <p style="margin-left:7%;">
+            <a href="{{ url_for('user',  id = uu.id) }}">
+                <img  class=" post-thumbnail img-rounded profile-thumbnail" src="{{ uu.gravatar(size=28) }}">
+            </a> <span style="position: relative; left:8px;font-size: 135%; font-weight: 700%"><a  class="user" href="{{ url_for('user',  id =uu.id) }}">{{ uu.name }}</a></span> {% if uu.about_me %}<span style="position: relative; left:8px;font-size: 13px; ">, {{uu.about_me}}</span>{% endif %}
+            </p>  
+            <hr style="margin-left: 7%;; align:left; width: 675px; " />
+            {% endfor %}            
+  <div style="margin-left: 60%;">                 
+{% import "_macros.html" as macros %}
+  {% if pagination %}
+
+    {{ macros.pagination_widget(pagination, '.followers' , id =u.id) }}
+
+{% endif %}
+</br>
+</div>
+{% endblock %}
