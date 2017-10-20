@@ -1,0 +1,12 @@
+    server {
+      listen  80;
+      server_name 39.106.59.184; 
+    
+      location / {
+        include      uwsgi_params;
+        uwsgi_pass   127.0.0.1:8001;  
+        uwsgi_param UWSGI_PYHOME /home/www/my_flask/venv; 
+        uwsgi_param UWSGI_CHDIR  /home/www/my_flask; 
+        uwsgi_param UWSGI_SCRIPT manage:app; 
+      }
+    }

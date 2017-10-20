@@ -1,0 +1,22 @@
+[uwsgi]
+
+
+socket = 127.0.0.1:8001 
+
+
+chdir = /home/www/my_flask
+
+
+wsgi-file = manage.py 
+
+
+callable = app 
+
+
+processes = 4
+
+
+threads = 2
+
+
+stats = 127.0.0.1:9191

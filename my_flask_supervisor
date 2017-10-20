@@ -1,0 +1,13 @@
+[program:my_flask]
+
+command=/home/www/my_flask/venv/bin/uwsgi  /home/www/my_flask/config.ini
+
+
+directory=/home/www/my_flask
+
+user=root
+        
+autostart=true
+autorestart=true
+
+stdout_logfile=/home/www/my_flask/logs/uwsgi_supervisor.log  
