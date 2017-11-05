@@ -11,7 +11,7 @@ class Config:
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = 'farmidnear@163.com'
-    MAIL_PASSWORD ='adequate123'
+    MAIL_PASSWORD ='the smtp password' #Your password
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     FLASKY_MAIL_SENDER =  'Flask Admin <farmidnear@163.com>'
     FLASKY_ADMIN = '491903644@qq.com'
