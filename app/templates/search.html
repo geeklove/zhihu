@@ -85,7 +85,7 @@
 		<p style=" margin-left: 7%; 
 		                  font-size: 18px;
 		                  width: 700px;
-		                  "><a style=" position: relative; top: 7px;"  class="zhihuz" href="{{ url_for('question', id = p.id) }}">{{ p.title_or_ans }}</a>
+		                  "><a style=" position: relative; top: 7px;"  class="zhihuz" href="{{ url_for('article', id = p.id) }}">{{ p.title_or_ans }}</a>
 		                    <span style="font-size:13px; position: absolute; left: 61%;
 		              ">{{ moment(p.timestamp).fromNow() }}</span></br></p>
 		<p style=" margin-left: 7%; 
